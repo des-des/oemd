@@ -1,78 +1,16 @@
 import React from 'react'
 import Plain from 'slate-plain-serializer'
 import { Editor } from 'slate-react'
-import { Value } from 'slate'
-import generateId from 'uuid/v4'
 import { connect } from 'react-redux'
 
+import ActionBar from './ActionBar'
 import Mark from './Mark'
 import decorateNode from '../utils/decorate_node'
+// import getDecorator from '../utils/decorate_node_2'
 import * as actions from '../actions'
 import { modes } from '../reducers/commands'
 
-const getCommands = notes => {
-  return ([
-    {
-      name: 'new note',
-      key: 'NEW'
-    }
-  ]).concat(
-    notes
-      .filter(note => note.title.trim() !== '')
-      .map(note => ({
-        key: 'OPEN',
-        name: `open note ${note.title}`,
-        meta: {
-          noteId: note.id
-        }
-      }))
-  )
-}
-
-const commandFilterPred = search => command => {
-  return command.name.toLowerCase().includes(search.toLowerCase())
-}
-
-const CommandOpts = ({ inputValue, notes }) => {
-  const remaining = getCommands(notes)
-    .filter(commandFilterPred(inputValue))
-
-  return (
-    <div style={{
-      display: 'block',
-      marginLeft: '10em',
-      width: '15em',
-      fontSize: '2em',
-      border: 'none',
-      backgroundColor: 'black',
-      color: 'white',
-      position: 'absolute',
-      top: 0
-    }}>
-      { remaining.map((command, i) =>  {
-        const selected = i === 0
-        const offset = command.name.toLowerCase().indexOf(inputValue.toLowerCase())
-        const len = inputValue.length
-
-        const start = command.name.slice(0, offset)
-        const hightlighted = command.name.slice(offset, offset + len)
-        const end = command.name.slice(offset + len)
-
-        return (
-          <span style={{
-              display: 'block',
-              backgroundColor: selected ? '#111111' : 'black'
-            }}>
-            {start}
-            <strong>{hightlighted}</strong>
-            {end}
-          </span>
-        )
-      } )[0]}
-    </div>
-  )
-}
-
+// const decorateNode2 = getDecorator({})
 const emptyNote = () => Plain.deserialize('# ')
   .change()
   .selectAll()
@@ -84,63 +22,75 @@ class MarkdownEditor extends React.Component {
     timeStamp: new Date()
   }
 
-  onChange = ({value}) => {
+  onKeyUp = event => {
+    if (event.keyCode === 27) { // escape pressed
+      this.props.toggleMode()
+    }
+
+  }
+
+  onChange = (change) => {
+    const { value } = change
+    // console.log(change)
+    console.log(change.value.blocks.map(block => block.text).toJS());
+    console.log(JSON.stringify(change.value.blocks.toJS(), null, 4));
+    // console.log(change.value.selection.toJS());
     this.props.editNote(value)
   }
 
-  onKeyUp = event => {
-    if (this.props.mode === modes.command) {
-      const { keyCode } = event
-      if (keyCode === 13) { // enter pressed
-        const filtered = getCommands(Object.values(this.props.notes))
-          .filter(commandFilterPred(this.props.commandInput))
-        if (filtered.length === 0) return
-
-        const action = filtered[0]
-
-        if (action.key === 'NEW') {
-          this.props.newNote()
-        } else if (action.key === 'OPEN') {
-          this.props.openNote(action.meta.noteId)
-        }
-      } else {
-        this.props.commandInputKeyUp(event)
-      }
-    } else {
-      if (event.keyCode === 27) { // escape pressed
-        this.props.commandInputKeyUp(event)
-      }
-    }
-  }
-
-
   render() {
     const activeNote = this.props.activeNote
+    const lastNote = this.props.lastNote
+    const nextNote = this.props.nextNote
+
+    // const currentEditor = (
+    //   <Editor
+    //     ref={editor => { this.editor = editor }}
+    //     key={activeNote.id}
+    //     autoFocus
+    //     placeholder=""
+    //     value={activeNote ? activeNote.value : emptyNote()}
+    //     onChange={this.onChange}
+    //     onKeyUp={this.onKeyUp}
+    //     renderMark={Mark}
+    //     decorateNode={decorateNode}
+    //     style={{ width: '40em', paddingBottom: '2em' }}
+    //   />
+    // )
+    //
+    // const nextEditor = nextNote && (
+    //   <Editor
+    //     key={activeNote.id}
+    //     placeholder=""
+    //     value={nextNote}
+    //     renderMark={Mark}
+    //     decorateNode={decorateNode}
+    //     style={{ width: '40em', paddingBottom: '2em' }}
+    //   />
+    // )
+    //
+    // const lastEditor = lastNote && (
+    //   <Editor
+    //     key={activeNote.id}
+    //     placeholder=""
+    //     value={lastNote}
+    //     renderMark={Mark}
+    //     decorateNode={decorateNode}
+    //     style={{ width: '40em', paddingBottom: '2em' }}
+    //   />
+    // )
+    //
+
 
     return (
-      <div className="editor">
-        <input
-          ref={ actionBar => { this.actionBar = actionBar }}
-          onKeyUp={this.onKeyUp}
-          onChange={this.props.commandInputChange}
-          value={this.props.mode === modes.command ? this.props.commandInput : ''}
-          style={{
-            display: 'block',
-            marginLeft: '10em',
-            width: '15em',
-            fontSize: '2em',
-            border: 'none',
-            backgroundColor: 'black',
-            color: 'white'
-          }}
+      <div className="editor" style={{ fontSize: '1.2em' }}>
+        <ActionBar
+          inputRef={actionBar => { this.actionBar = actionBar}}
         />
-      { this.props.mode === modes.command &&
-          <CommandOpts inputValue={this.props.commandInput } notes={Object.values(this.props.notes)} />
-        }
         <div
           style={{
             float: 'left',
-            width: '20em'
+            width: '12em'
           }}
         >
           <span style={{
@@ -160,14 +110,14 @@ class MarkdownEditor extends React.Component {
 
           <Editor
             ref={editor => { this.editor = editor }}
-            autoFocus
+            key={activeNote.id}
             placeholder=""
             value={activeNote ? activeNote.value : emptyNote() }
             onChange={this.onChange}
             onKeyUp={this.onKeyUp}
-            renderMark={Mark}
             decorateNode={decorateNode}
-            style={{ width: '30em', paddingBottom: '2em' }}
+            renderMark={Mark}
+            style={{ width: '40em', paddingBottom: '2em' }}
           />
         </div>
       </div>
@@ -177,8 +127,8 @@ class MarkdownEditor extends React.Component {
   componentDidUpdate = (prevProps) => {
     if (prevProps.mode === this.props.mode) return
 
-    if (this.props.mode === modes.input) this.editor.focus()
-    else if (this.props.mode === modes.command) this.actionBar.focus()
+    if (this.props.mode === modes.input) { this.editor.focus() }
+    else if (this.props.mode === modes.command) { this.actionBar.focus() }
   }
 }
 

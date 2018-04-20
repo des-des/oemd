@@ -50,9 +50,16 @@ const store = createStore(
   )
 )
 
+const lastNotesById = {}
+
 store.subscribe(() => {
   const state = store.getState()
-  const activeNote = state.notes.notesById[state.notes.activeNoteId]
+  const activeNoteId = state.notes.activeNoteId
+  const activeNote = state.notes.notesById[activeNoteId]
+
+  const lastNote = lastNotesById[activeNoteId]
+  if (lastNote === activeNote) return
+
   const noteString = JSON.stringify({
     ...activeNote,
     value: activeNote.value.toJSON()
@@ -60,6 +67,7 @@ store.subscribe(() => {
 
   localStorage.setItem('activeNoteId', state.notes.activeNoteId)
   localStorage.setItem(`note:${activeNote.id}`, noteString)
+  lastNotesById[activeNoteId] = activeNote
 })
 
 if (keys.length === 0) {

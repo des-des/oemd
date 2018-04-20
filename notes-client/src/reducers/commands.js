@@ -47,7 +47,8 @@ const toggleMode = state => {
 
   return {
     ...state,
-    mode: newMode
+    mode: newMode,
+    inputValue: ''
   }
 }
 
@@ -55,5 +56,5 @@ export default createReducer(initialState, {
   NEW_NOTE: newNote,
   OPEN_NOTE: openNote,
   TOGGLE_MODE: toggleMode,
-  COMMAND_INPUT_CHANGE: commandInputChange 
+  COMMAND_INPUT_CHANGE: commandInputChange
 })

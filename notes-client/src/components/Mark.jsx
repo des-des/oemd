@@ -32,40 +32,45 @@ export default props => {
       {
         return (<h1 style={{
             fontWeight: 'bold',
-            fontSize: '2.5em',
+            fontSize: '1em',
             margin: '0.4em 0 0.2em 0',
             display: 'inline-block',
-            borderBottom: '3px solid #ffffff',
-            width: '30rem'
+            borderBottom: '0.3em solid #ffffff',
+            width: '100%'
           }}>
-          {hightlightHash(children)}
+          <span style={{ fontSize: '2.5em' }}>
+            {hightlightHash(children)}
+          </span>
         </h1>)
       }
     case 'h2':
       {
         return (<h2 style={{
           fontWeight: 'bold',
-          fontSize: '2.0em',
+          fontSize: '1.0em',
           margin: '0.35em 0 0.18em 0',
           display: 'inline-block',
-          borderBottom: '1.5px solid #ffffff',
-          width: '30rem'
+          borderBottom: '0.15em solid #ffffff',
+          width: '100%'
           }}>
-          {hightlightHash(children)}
-
+          <span style={{ fontSize: '2.0em' }}>
+            {hightlightHash(children)}
+          </span>
         </h2>)
       }
     case 'h3':
       {
         return (<h3 style={{
           fontWeight: 'bold',
-          fontSize: '1.5em',
+          fontSize: '1.0em',
           margin: '0.3em 0 0.15em 0',
           display: 'inline-block',
-          borderBottom: '1px solid #aaaaaa',
-          width: '30rem'
+          borderBottom: '0.1em solid #aaaaaa',
+          width: '100%'
           }}>
-          {hightlightHash(children)}
+          <span style={{ fontSize: '1.5em' }}>
+            {hightlightHash(children)}
+          </span>
 
         </h3>)
       }
@@ -76,8 +81,8 @@ export default props => {
           fontSize: '1em',
           margin: '0.2em 0 0.1em 0',
           display: 'inline-block',
-          borderBottom: '0.7px solid #888888',
-          width: '30rem'
+          borderBottom: '0.07em solid #888888',
+          width: '100%'
           }}>
           {hightlightHash(children)}
 

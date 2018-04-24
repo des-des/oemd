@@ -30,6 +30,11 @@ const openPreviousNote = state => {
 }
 
 const noteTitle = value => {
+  // console.log(value.document.nodes);
+  // value.document.nodes.forEach(node => {
+  //   console.log(node.toJS())
+  // })
+  // console.log(value.document.nodes)
   const title = value.document.nodes.first().text.split('#')[1]
   return title ? title.trim() : ''
 }

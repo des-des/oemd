@@ -1,0 +1,89 @@
+import React from 'react'
+import { Editor as SlateEditor } from 'slate-react'
+
+const findPluginByType = plugins => type => {
+  for (let i = 0; i < plugins.length; i++) {
+    if (plugins[i].type === type) return plugins[i]
+  }
+}
+
+const eventHandler = nodePlugins => eventName => (event, change) => {
+  nodePlugins
+    .map(plugin => plugin[eventName])
+    .reduce(
+      (done, onEvent) => done || (onEvent && onEvent(event, change)),
+      false)
+}
+
+class Editor extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.block = findPluginByType(this.props.blockPlugins)
+    this.mark = findPluginByType(this.props.markPlugins)
+    this.event = eventHandler(this.props.blockPlugins)
+
+    this.renderMark = this.renderMark.bind(this)
+    this.decorateNode = this.decorateNode.bind(this)
+    this.renderNode = this.renderNode.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
+    this.onChange = this.onChange.bind(this)
+  }
+
+  renderMark(props) {
+    const { mark: { type } } = props
+
+    return this.mark(type).render(props)
+  }
+
+  renderNode(props) {
+    const currentBlock = this.block(props.node.type)
+
+    if (currentBlock && currentBlock.render) return currentBlock.render(props)
+  }
+
+  decorateNode(node) {
+    const currentBlock = this.block(node.type)
+
+    if (currentBlock && currentBlock.decorations) {
+      return currentBlock.decorations(node)
+    }
+  }
+
+  onKeyUp(event) {
+    return this.event('onKeyUp')(event)
+
+  }
+
+  onKeyDown(event, change) {
+    if (event.keyCode === 27) { // escape pressed
+      this.props.toggleMode()
+
+      return true
+    }
+
+    return this.event('onKeyDown')(event, change)
+  }
+
+  onChange(change) {
+    this.props.editNote(change.value)
+  }
+
+  render() {
+    return (
+      <SlateEditor
+      {...this.props.attributes}
+      renderNode={this.renderNode}
+      decorateNode={this.decorateNode}
+      onKeyUp={this.onKeyUp}
+      onKeyDown={this.onKeyDown}
+      renderMark={this.renderMark}
+      onChange={this.onChange}
+      value={this.props.value}
+      />
+    )
+  }
+}
+
+export default Editor

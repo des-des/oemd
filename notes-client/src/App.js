@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 
 import store from './store'
-import Editor from './components/Editor'
+import EditorPage from './components/EditorPage'
 import './App.css'
 
 class App extends Component {
@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <div className="App">
         <Provider store={store}>
-          <Editor />
+          <EditorPage />
         </Provider>
       </div>
     )

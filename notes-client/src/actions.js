@@ -5,6 +5,7 @@ import {
   OPEN_NEXT_NOTE,
   OPEN_PREVIOUS_NOTE,
   COMMAND_INPUT_KEY_UP,
+  COMMAND_INPUT_KEY_DOWN,
   COMMAND_INPUT_CHANGE,
   TOGGLE_MODE
 } from './constants/action_types'
@@ -41,5 +42,6 @@ export const newNote = payload => {
 }
 
 export const commandInputKeyUp = plainAction(COMMAND_INPUT_KEY_UP)
+export const commandInputKeyDown = plainAction(COMMAND_INPUT_KEY_DOWN)
 export const commandInputChange = plainAction(COMMAND_INPUT_CHANGE)
 export const toggleMode = plainAction(TOGGLE_MODE)

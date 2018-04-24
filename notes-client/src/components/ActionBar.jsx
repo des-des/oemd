@@ -73,7 +73,7 @@ const CommandOpts = ({ inputValue, notes }) => {
 
 class ActionBar extends React.Component {
 
-  onKeyUp = event => {
+  onKeyDown = event => {
     const { keyCode } = event
     if (keyCode === 13) { // enter pressed
       const filtered = getCommands(Object.values(this.props.notes))
@@ -90,7 +90,7 @@ class ActionBar extends React.Component {
         this.props.openNote(action.meta.noteId)
       }
     } else {
-      this.props.commandInputKeyUp(event)
+      this.props.commandInputKeyDown(event)
     }
   }
 
@@ -100,7 +100,7 @@ class ActionBar extends React.Component {
       <div className="action_bar">
         <input
           ref={this.props.inputRef}
-          onKeyUp={this.onKeyUp}
+          onKeyDown={this.onKeyDown}
           onChange={this.props.commandInputChange}
           value={this.props.mode === modes.command ? this.props.commandInput : ''}
           style={{

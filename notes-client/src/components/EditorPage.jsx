@@ -8,7 +8,7 @@ import * as actions from '../actions'
 import { modes } from '../reducers/commands'
 
 import Editor from './Editor'
-import { title } from '../blocks/'
+import { title, list, listItem } from '../blocks/'
 import { punctuation } from '../marks/'
 
 class MarkdownEditor extends React.Component {
@@ -20,7 +20,7 @@ class MarkdownEditor extends React.Component {
     const activeNote = this.props.activeNote
 
     return (<div className="editor" style={{
-        fontSize: '1em'
+        fontSize: '1.2em'
       }}>
       <ActionBar inputRef={actionBar => {
           this.actionBar = actionBar
@@ -51,7 +51,7 @@ class MarkdownEditor extends React.Component {
           value={activeNote.value}
           editNote={this.props.editNote}
           toggleMode={this.props.toggleMode}
-          blockPlugins={[title()]}
+          blockPlugins={[title(), listItem(), list()]}
           markPlugins={[punctuation()]}
           attributes={{
             style:{

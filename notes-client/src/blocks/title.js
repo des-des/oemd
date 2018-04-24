@@ -1,5 +1,7 @@
 import React from 'react'
 
+import getCursorAtOffset from '../utils/get_cursor_at_offset'
+
 export default (opts = {}) => {
   return {
     type: 'title',
@@ -11,28 +13,9 @@ export default (opts = {}) => {
       const anchorKey = textNodes.first().key
 
       const {
-        focusOffset,
-        focusKey
-      } = textNodes.reduce((acc, textNode) => {
-        const { focusKey, focusOffset, done } = acc
-        if (done) return acc
-
-        const currentText = textNode.text
-
-        const nextOffset = focusOffset - currentText.length
-        if (nextOffset <= 0) {
-          return {
-            ...acc,
-            done: true
-          }
-        }
-
-        return {
-          focusKey: currentText.key,
-          focusOffset: nextOffset,
-          done: false
-        }
-      }, { focusOffset: level, focusKey: anchorKey, done: false })
+        offset: focusOffset,
+        key: focusKey
+      } = getCursorAtOffset(node, level)
 
       return [{
         anchorKey,
@@ -87,6 +70,8 @@ export default (opts = {}) => {
           if (withSpace.match(/(^#+)\ +/)) {
             const level = withSpace.split(' ')[0].length
             change.setBlocks({ type: 'title', data: { level }})
+            
+            return true;
           }
         }
       }
@@ -95,9 +80,11 @@ export default (opts = {}) => {
         if (event.key === 'Enter') {
           change.splitBlock().setBlocks('line')
 
-          return true;
+          return false;
         }
       }
+
+      return true
     }
   }
 }

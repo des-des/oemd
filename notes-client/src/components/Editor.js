@@ -8,11 +8,16 @@ const findPluginByType = plugins => type => {
 }
 
 const eventHandler = nodePlugins => eventName => (event, change) => {
-  nodePlugins
+  return nodePlugins
     .map(plugin => plugin[eventName])
     .reduce(
-      (done, onEvent) => done || (onEvent && onEvent(event, change)),
-      false)
+      (shouldContinue, onEvent) => {
+        if (!shouldContinue) return shouldContinue
+        if (!onEvent) return shouldContinue
+
+        return shouldContinue && onEvent(event, change)
+      },
+      true)
 }
 
 class Editor extends React.Component {
@@ -63,7 +68,11 @@ class Editor extends React.Component {
       return true
     }
 
-    return this.event('onKeyDown')(event, change)
+    const onKeyDown = this.event('onKeyDown')
+
+    if (onKeyDown) {
+      return onKeyDown(event, change)
+    }
   }
 
   onChange(change) {

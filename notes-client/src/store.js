@@ -65,6 +65,11 @@ store.subscribe(() => {
     value: activeNote.value.toJSON()
   })
 
+  // console.log(JSON.stringify({
+  //   ...activeNote,
+  //   value: activeNote.value.toJSON()
+  // }, null, 4))
+
   localStorage.setItem('activeNoteId', state.notes.activeNoteId)
   localStorage.setItem(`note:${activeNote.id}`, noteString)
   lastNotesById[activeNoteId] = activeNote

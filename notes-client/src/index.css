@@ -6,6 +6,17 @@ body {
   color: white;
 }
 
+.list {
+  margin: 0;
+  padding: 0;
+}
+
+.list-item {
+  list-style-type: none;
+  margin-right: 0;
+  padding-right: 0;
+}
+
 .title {
   font-weight: bold;
   width: 100;

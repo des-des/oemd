@@ -7,7 +7,7 @@
     "test": "node test",
     "watch:test": "nodemon -w grammar.js -w test.js -x 'npm run test'",
     "watch:build": "nodemon -i schema.js -i grammar.js -e ne -x 'npm run build'",
-    "build": "npx nearleyc ./grammar/grammar_5.ne -o grammar.js"
+    "build": "npx nearleyc ./grammar/grammar.ne -o grammar.js"
   },
   "keywords": [],
   "author": "",

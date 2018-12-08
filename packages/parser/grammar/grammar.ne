@@ -26,7 +26,7 @@ const containsInline = chars => {
 
 block ->
   #  paragraph {% d => d %}
-    paragraph {% d => node('strong', {}, d[0]) %}
+    paragraph {% d => node('p', {}, d[0]) %}
   | title     {% id %}
   | list      {% id %}
   | numberlist      {% id %}

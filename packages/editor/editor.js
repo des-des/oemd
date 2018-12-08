@@ -1,6 +1,6 @@
 import Automerge from 'automerge'
 import { patch, h, toVNode as domToVNode } from './snabbdom.js'
-import parse from '../parser/parse.js'
+import parse from './vnode_creators/vnode_markdown_it_ast.js'
 
 const INSERT_TEXT = 'INSERT_TEXT'
 const SPLIT_BLOCK = 'SPLIT_BLOCK'
@@ -19,7 +19,7 @@ socket.on('connected', msg => {
     })
 
     initialState = Automerge.change(initialState, 'init2', doc => {
-      doc.blocks[0].insertAt(0, ...'# Title'.split(''))
+      doc.blocks[0].insertAt(0, ...'# Title with **bold**'.split(''))
     })
 
     oemd('editor', initialState)
@@ -99,6 +99,7 @@ const oemd = (targetId, initialState) => {
   patch(domNode, vNode)
 
   socket.on('get_state', () => {
+    console.log('recieved get state!')
     if (isDocumentOwner) {
       const changes = Automerge.getChanges(Automerge.init(), state)
 

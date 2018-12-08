@@ -1,36 +1,16 @@
 import React from 'react'
+import { Range } from 'slate'
 
-import getCursorAtOffset from '../utils/get_cursor_at_offset'
+import punctuateAt from '../utils/punctuate_at'
 
 export default (opts = {}) => {
   return {
     type: 'list-item',
-    decorations: node => {
-      const {
-        key: anchorKey,
-        offset: anchorOffset
-      } = getCursorAtOffset(node, 2)
-
-      const {
-        key: focusKey,
-        offset: focusOffset
-      } = getCursorAtOffset(node, 3)
-
-      return [{
-        anchorKey,
-        anchorOffset,
-        focusKey,
-        focusOffset,
-        marks: [{
-          type: 'punctuation'
-        }]
-      }]
-    },
     render: props => {
       const { node } = props
 
       return (
-        <li className='list-item'> { props.children } </li>
+        <li className='list-item' {...props.attributes}> { props.children } </li>
       )
     },
     onKeyDown: (event, change) => {
@@ -43,17 +23,20 @@ export default (opts = {}) => {
         if (event.key === ' ') {
           const withSpace = block.text + ' '
           if (withSpace.match(/(^  \*)\ +/)) {
-            const level = withSpace.split(' ')[0].length
             change
-              .setBlock('list-item')
+              .setBlocks('list-item')
               .wrapBlock('list')
+              .insertText(' ')
+              .call(punctuateAt(2, block.key))
+
+            return false;
           }
         }
       }
 
       if (block.type === 'list-item') {
         if (event.key === 'Enter') {
-          if (block.text === '  * ') {
+          if (block.text === '  *  ') {
             change
               .deleteBackward(4)
               .unwrapBlock()
@@ -67,7 +50,11 @@ export default (opts = {}) => {
             .setBlock({
               type: 'list-item'
             })
-            .insertText('  * ')
+            .insertText('  *  ')
+
+          const newBlock = change.value.document.getNextBlock(block.key)
+
+          change.call(punctuateAt(2, newBlock.key))
 
           event.preventDefault()
           return false;

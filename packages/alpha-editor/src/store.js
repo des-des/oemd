@@ -4,7 +4,10 @@ import { default as loggerMiddleware } from 'redux-logger'
 
 import reducers from './reducers/'
 import * as actions from './actions'
-import { commands as commandsMiddleware } from './middleware/'
+import {
+  commands as commandsMiddleware,
+  // tagger as taggerMiddleware
+} from './middleware/'
 import userGuide from './user_guide'
 
 const activeNoteId = localStorage.getItem('activeNoteId')
@@ -46,6 +49,7 @@ const store = createStore(
   initialState,
   applyMiddleware(
     commandsMiddleware,
+    // taggerMiddleware,
     loggerMiddleware
   )
 )

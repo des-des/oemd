@@ -9,7 +9,7 @@ export default (opts = {}) => {
       const { node } = props
 
       return (
-        <ul className='list'> { props.children } </ul>
+        <ul className='list' {...props.attributes}> { props.children } </ul>
       )
     }
   }

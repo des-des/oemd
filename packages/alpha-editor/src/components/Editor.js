@@ -2,8 +2,10 @@ import React from 'react'
 import { Editor as SlateEditor } from 'slate-react'
 
 const findPluginByType = plugins => type => {
-  for (let i = 0; i < plugins.length; i++) {
-    if (plugins[i].type === type) return plugins[i]
+  if (plugins) {
+    for (let i = 0; i < plugins.length; i++) {
+      if (plugins[i].type === type) return plugins[i]
+    }
   }
 }
 
@@ -39,7 +41,8 @@ class Editor extends React.Component {
   renderMark(props) {
     const { mark: { type } } = props
 
-    return this.mark(type).render(props)
+    const mark = this.mark(type)
+    return mark && mark.render(props)
   }
 
   renderNode(props) {
@@ -52,6 +55,7 @@ class Editor extends React.Component {
     const currentBlock = this.block(node.type)
 
     if (currentBlock && currentBlock.decorations) {
+      console.log('POW', currentBlock);
       return currentBlock.decorations(node)
     }
   }
@@ -76,6 +80,7 @@ class Editor extends React.Component {
   }
 
   onChange(change) {
+    console.log('history', change.value.history.toJS());
     this.props.editNote(change.value)
   }
 

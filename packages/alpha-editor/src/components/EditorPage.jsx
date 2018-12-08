@@ -10,10 +10,19 @@ import { modes } from '../reducers/commands'
 import Editor from './Editor'
 import { title, list, listItem } from '../blocks/'
 import { punctuation } from '../marks/'
+import html from '../utils/html'
 
 class MarkdownEditor extends React.Component {
   state = {
     timeStamp: new Date()
+  }
+
+  getHtml = () => {
+    console.log('POW');
+    // if (this.props.activeNote.value) {
+      console.log('WOW');
+      console.log(html.serialize(this.props.activeNote.value))
+    // }
   }
 
   render() {
@@ -64,6 +73,7 @@ class MarkdownEditor extends React.Component {
           }}
           />
       </div>
+      <div onClick={this.getHtml}>GET HTML</div>
     </div>)
   }
 
@@ -77,6 +87,7 @@ class MarkdownEditor extends React.Component {
     }
   }
 }
+// {/*markPlugins={[punctuation()]}*/}
 
 const mapStateToProps = state => ({
   commandInput: state.commands.inputValue,

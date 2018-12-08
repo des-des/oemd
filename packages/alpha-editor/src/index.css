@@ -9,12 +9,14 @@ body {
 .list {
   margin: 0;
   padding: 0;
+  border: 1px solid blue;
 }
 
 .list-item {
   list-style-type: none;
   margin-right: 0;
   padding-right: 0;
+  border: 1px solid red;
 }
 
 .title {

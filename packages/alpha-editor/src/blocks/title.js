@@ -1,34 +1,14 @@
 import React from 'react'
 
-import getCursorAtOffset from '../utils/get_cursor_at_offset'
+import punctuateAt from '../utils/punctuate_at'
 
 export default (opts = {}) => {
   return {
     type: 'title',
-    decorations: node => {
-      const level = node.data.get('level')
-      const textNodes = node.getTexts()
-
-      const anchorOffset = 0;
-      const anchorKey = textNodes.first().key
-
-      const {
-        offset: focusOffset,
-        key: focusKey
-      } = getCursorAtOffset(node, level)
-
-      return [{
-        anchorKey,
-        anchorOffset,
-        focusKey,
-        focusOffset,
-        marks: [{
-          type: 'punctuation'
-        }]
-      }]
-    },
     render: props => {
       const { node } = props
+      console.log('RENDERING TITLE');
+      console.log(node.data.get('level'));
       switch (node.data.get('level')) {
         case 1: {
           return (
@@ -59,6 +39,8 @@ export default (opts = {}) => {
           )
         }
       }
+
+      return <span> {props.children} </span>
     },
     onKeyDown: (event, change) => {
       const { value } = change
@@ -69,8 +51,11 @@ export default (opts = {}) => {
           const withSpace = block.text + ' '
           if (withSpace.match(/(^#+)\ +/)) {
             const level = withSpace.split(' ')[0].length
-            change.setBlocks({ type: 'title', data: { level }})
-            
+            change
+              .setBlocks({ type: 'title', data: { level }})
+              .insertText(' ')
+              .call(punctuateAt(0, block.key, level))
+
             return true;
           }
         }

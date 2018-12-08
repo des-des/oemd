@@ -10,7 +10,6 @@ var log = text => d => { console.log(text, d); return d ;};
 var unwrap = d => d[0]
 var tag = (type, f = d => d) => d => ({ type: typeof type === 'function' ? type(d) : type, value: f(d) })
 var tagid = type => d => ({ type: type, value: d[0] })
-const schema = require('../prose/dist/schema.js').default
 const node = (tag, attrs, children) => ({ tag, attrs, children })
 const textNode = content => node('text', {}, content)
 

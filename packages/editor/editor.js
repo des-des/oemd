@@ -15,8 +15,11 @@ socket.on('connected', msg => {
     initialState = Automerge.change(initialState, 'init1', doc => {
       doc.blocks = []
       const title = new Automerge.Text()
-      title.insertAt(0, ...'# Title'.split(''))
       doc.blocks.push(title)
+    })
+
+    initialState = Automerge.change(initialState, 'init2', doc => {
+      doc.blocks[0].insertAt(0, ...'# Title'.split(''))
     })
 
     oemd('editor', initialState)
@@ -56,16 +59,13 @@ const reducers = {
   SPLIT_BLOCK: (state, { blockIndex, offset }) => {
     return Automerge.change(state, 'insert', state => {
       const { blocks } = state
-
-      const blocksBefore = blocks.slice(0, blockIndex)
-      const splitBlock = blocks[blockIndex]
-      const blocksAfter = blocks.slice(blockIndex + 1)
+      const targetBlock = blocks[blockIndex]
 
       blocks.deleteAt(blockIndex)
       blocks.insertAt(
         blockIndex,
-        splitBlock.slice(0, offset),
-        splitBlock.slice(blockIndex + 1)
+        targetBlock.slice(0, offset),
+        targetBlock.slice(offset)
       )
     })
   }

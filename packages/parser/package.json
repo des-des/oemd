@@ -1,0 +1,21 @@
+{
+  "name": "parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "parse.js",
+  "scripts": {
+    "test": "node test",
+    "watch:test": "nodemon -w grammar.js -w test.js -x 'npm run test'",
+    "watch:build": "nodemon -i schema.js -i grammar.js -e ne -x 'npm run build'",
+    "build": "npx nearleyc ./grammar/grammar_5.ne -o grammar.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nearley": "^2.15.1"
+  },
+  "devDependencies": {
+    "tape": "^4.9.1"
+  }
+}

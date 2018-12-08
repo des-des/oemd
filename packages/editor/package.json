@@ -1,0 +1,36 @@
+{
+  "name": "prose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch:build": "nodemon -i dist -i example -x 'npm run build'",
+    "build": "webpack --config config.webpack.js",
+    "example": "nodemon -w dist -x 'cd example && npm run start'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "automerge": "^0.9.2",
+    "markdown": "^0.5.0",
+    "markdown-it": "^8.4.2",
+    "mpl": "^0.3.0",
+    "prosemirror-example-setup": "^1.0.1",
+    "prosemirror-model": "^1.6.2",
+    "prosemirror-state": "^1.2.2",
+    "prosemirror-view": "^1.6.3",
+    "remark-parse": "^6.0.3",
+    "remarkable": "^1.7.1",
+    "snabbdom": "^0.7.2",
+    "unified": "^7.0.2",
+    "unified-stream": "^1.0.4",
+    "webpack-cli": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "webpack": "^4.21.0"
+  }
+}

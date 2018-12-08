@@ -7,12 +7,24 @@
       #editor {
         white-space: pre;
       }
+
+      body {
+        background-color: black;
+        color: white;
+        font-family: 'Inconsolata', monospace;
+        font-size: 1.3em;
+      }
     </style>
+    <link rel="stylesheet" href="/tachyons.css" />
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
-      var socket = io();
+      var socket = io()
     </script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Inconsolata:400,700"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="editor" contenteditable="true"></div>

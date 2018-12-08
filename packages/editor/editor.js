@@ -99,7 +99,6 @@ const oemd = (targetId, initialState) => {
   patch(domNode, vNode)
 
   socket.on('get_state', () => {
-    console.log('recieved get state!')
     if (isDocumentOwner) {
       const changes = Automerge.getChanges(Automerge.init(), state)
 
@@ -175,7 +174,12 @@ const findNodeInDomAtOffset = (container, offset) => {
     node = nextNode
   }
 
-  alert('cursor out of range')
+  return {
+    innerOffset: 0,
+    container
+  }
+
+  // alert('cursor out of range')
 }
 
 const setCursor = (targetId, range, blockIndex, offset) => {
@@ -186,6 +190,10 @@ const setCursor = (targetId, range, blockIndex, offset) => {
 
   range.setStart(newCursorNode, newCursorOffset)
   range.setEnd(newCursorNode, newCursorOffset)
+
+  const selection = window.getSelection()
+  selection.removeAllRanges()
+  selection.addRange(range)
 }
 
 const keysSkip = ['Control', 'Shift', 'Alt']
@@ -236,7 +244,7 @@ const keyDownHandler = (update, targetId) => e => {
       setCursor(targetId, range, blockIndex - 1, offset)
     }
   } else if (key === 'ArrowRight') {
-    if (offset !== blockParent.textContent.length - 1) {
+    if (offset !== blockParent.textContent.length) {
       setCursor(targetId, range, blockIndex, offset + 1)
     }
   } else if (key === 'Backspace') {
@@ -271,9 +279,6 @@ const keyDownHandler = (update, targetId) => e => {
 
     setCursor(targetId, range, blockIndex, offset + 1)
   }
-
-  selection.removeAllRanges()
-  selection.addRange(range)
 }
 
 const stateToVNode = (targetId, state) => {

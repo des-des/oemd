@@ -1,0 +1,18 @@
+{
+  "name": "config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:parser": "cd ../parser && npm run build && cp ./grammar.js ../editor/parser.js",
+    "build:client": "cd ../editor && npm run build && cp ./dist/ ../server/public/",
+    "watch:build:parser": "cd ../parser && nodemon -i grammar.js -e ne -x 'npm run build && cp ./grammar.js ../editor/grammar.js && cp ./parse.js ../editor/parser.js'",
+    "watch:build:editor": "cd ../editor && nodemon -i dist -x 'npm run build && cp -r ./dist/* ../server/public'",
+    "run:server": "cd ../server && npm run start",
+    "watch:run:server": "cd ../server && nodemon -x 'npm run start'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

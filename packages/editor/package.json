@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch:build": "nodemon -i dist -i example -x 'npm run build'",
-    "build": "webpack --config config.webpack.js",
+    "build": "cp -r public/* dist && webpack --config config.webpack.js",
     "example": "nodemon -w dist -x 'cd example && npm run start'"
   },
   "keywords": [],

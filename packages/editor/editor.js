@@ -1,6 +1,6 @@
 import Automerge from 'automerge'
-import parse from '../parser/parse.js'
 import { patch, h, toVNode as domToVNode } from './snabbdom.js'
+import parse from '../parser/parse.js'
 
 const INSERT_TEXT = 'INSERT_TEXT'
 const SPLIT_BLOCK = 'SPLIT_BLOCK'

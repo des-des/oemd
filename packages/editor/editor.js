@@ -2,8 +2,6 @@ import Automerge from 'automerge'
 import parse from '../parser/parse.js'
 import { patch, h, toVNode as domToVNode } from './snabbdom.js'
 
-const log = value => console.log(value) || value
-
 const INSERT_TEXT = 'INSERT_TEXT'
 const SPLIT_BLOCK = 'SPLIT_BLOCK'
 const REMOVE_CHAR = 'REMOVE_CHAR'
@@ -17,20 +15,8 @@ socket.on('connected', msg => {
     initialState = Automerge.change(initialState, 'init1', doc => {
       doc.blocks = []
       const title = new Automerge.Text()
+      title.insertAt(0, ...'# Title'.split(''))
       doc.blocks.push(title)
-    })
-
-    initialState = Automerge.change(initialState, 'init2', doc => {
-      doc.blocks[0] = doc.blocks[0].insertAt(
-        0,
-        '#',
-        ' ',
-        'T',
-        'i',
-        't',
-        'l',
-        'e'
-      )
     })
 
     oemd('editor', initialState)
@@ -45,8 +31,6 @@ socket.on('initial_state_changes', changes => {
   let initialState = Automerge.init()
 
   initialState = Automerge.applyChanges(initialState, changes)
-
-  console.log({ initialState })
 
   oemd('editor', initialState)
 })
@@ -97,11 +81,11 @@ const updateState = (state, action) => {
 
   socket.emit('change', Automerge.getChanges(state, newState))
 
-  console.log({
-    oldState,
-    newState,
-    action
-  })
+  // console.log({
+  //   oldState,
+  //   newState,
+  //   action
+  // })
 
   return newState
 }
@@ -140,22 +124,6 @@ const oemd = (targetId, initialState) => {
   }
 
   domNode.addEventListener('keydown', keyDownHandler(update, targetId))
-}
-
-const inputHandler = update => e => {
-  const text = Array.prototype.map
-    .call(e.target.children, child => {
-      const childText = child.innerText
-      const len = childText.length
-      const res =
-        childText.charAt(len - 1) === '\n'
-          ? childText.slice(0, len - 2)
-          : childText
-      return res
-    })
-    .join('\n')
-
-  update(text)
 }
 
 const findBlockParent = node => {
@@ -308,9 +276,6 @@ const keyDownHandler = (update, targetId) => e => {
 }
 
 const stateToVNode = (targetId, state) => {
-  // const parseTree = parse("\n" + text)[0];
-  console.log(state)
-  console.log(state.blocks)
   return h(
     `div#${targetId}`,
     {},
